@@ -1,0 +1,12 @@
+/* 代码高亮字体 */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/font/JetBrainsMono-Regular.woff2') format('woff2'),
+    url('/font/JetBrainsMono-Regular.woff') format('woff');
+  font-display: swap;/* 字体加载完毕后再渲染页面*/
+}
+@font-face {
+    font-family: 'PingFang SC';
+    src: url('https://cdn.niceasiv.cn/PingFang-SC-Regular.ttf') format('truetype');
+    font-display: swap;/* 字体加载完毕后再渲染页面 */
+}

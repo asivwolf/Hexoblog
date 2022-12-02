@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Asiv's Blog</title><meta name="author" content="NiceAsiv"><meta name="copyright" content="NiceAsiv"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="我的CTF技术笔记">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Asiv&#39;s Blog">
+<meta property="og:url" content="https://niceasiv.cn/index.html">
+<meta property="og:site_name" content="Asiv&#39;s Blog">
+<meta property="og:description" content="我的CTF技术笔记">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://niceasiv.cn/sysimg/head.jpg">
+<meta property="article:author" content="NiceAsiv">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://niceasiv.cn/sysimg/head.jpg"><link rel="shortcut icon" href="/sysimg/head.jpg"><link rel="canonical" href="https://niceasiv.cn/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Asiv\'s Blog',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2022-11-29 19:21:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/sysimg/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('https://cdn.niceasiv.cn/202210311612595.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Asiv's Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">Asiv's Blog</h1><div id="site_social_icons"><a class="social-icon" href="/Todo/" target="_blank" title="Todo"><i class="fas fa-tasks"></i></a><a class="social-icon" href="/pdf/" target="_blank" title="PDF"><i class="fas fa-file-pdf"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2022/11/28/PE_DLL/" title="通过修改 PE 装载 DLL 实验"><img class="post_bg" src="https://cdn.niceasiv.cn/image-20221129184740738.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="通过修改 PE 装载 DLL 实验"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/11/28/PE_DLL/" title="通过修改 PE 装载 DLL 实验">通过修改 PE 装载 DLL 实验</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-11-28T10:16:09.000Z" title="Created 2022-11-28 18:16:09">2022-11-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/course/">course</a></span></div><div class="content">
+参考课件 chap06.pdf 中“通过修改PE装载DLL”一节的内容，以及课本第 5.5节的 内容，实现对notepad.exe（修復並下載Notepad.exe）的修改，使得修改后的 notepad.exe 在双击运行时，能够自动隐式装载 MyDll3.dll，并进而 将一个网页下载到本地index.html 文件。
+本上机作业的目的是让大家深入理解 PE 文件中的导入表、导入地址表等关键结构及相关的功能。
+
+本实验所使用的notepad.exe 是 Windows 7系统（最好32位版）中的可执行程序，MyDll3.dll 也仅保证在 Windows 7下能正常工作，因此，建议在 Windows 7环境（可预先安装虚拟机）下进行修改。请在虚拟机中禁用所有杀毒软件，确保修改过程不会受到杀毒软件的干扰。保证虚拟机能联网，以便DLL装载后的网页下载动作能正常完成。
+下载notepad.exe可能与课本中所描述的notepad.exe版本不一致，应主要参考课件中的修改流程。
+使用PEview分析PE文件，使用HxD编辑器修改PE文件。
+直接使用本书所附代码编译生成 MyDll3.dll ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/11/22/cluster/" title="KNN&amp;DBscan&amp;K-means实现"><img class="post_bg" src="https://cdn.niceasiv.cn/20210526131701159.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="KNN&amp;DBscan&amp;K-means实现"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/11/22/cluster/" title="KNN&amp;DBscan&amp;K-means实现">KNN&amp;DBscan&amp;K-means实现</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-11-22T12:51:09.000Z" title="Created 2022-11-22 20:51:09">2022-11-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/course/">course</a></span></div><div class="content">
+Python集成开发环境(IDE)
+(1) Anaconda: https://www.continuum.io/ （推荐）
+(2) IDLE: Python解释器默认工具
+(3) PyCharm: https://www.jetbrains.com/pycharm/
+(4) 实验数据集：Python的scikit-learn库中自带的鸢尾花数据集，可使用datasets.load_iris()载入。
+
+需要描述清楚算法流程，包括加载数据、数据处理、创建模型，训练，预测，评估模型等。如果必须给出实现代码才能更好地说明问题时，也必须先有相关的文字叙述，然后才是代码，代码只是作为例证
+鸢尾花数据集共收集了三类鸢尾花，即Setosa鸢尾花、Versicolour鸢尾花和Virginica鸢尾花，每一类鸢尾花收集了50条样本记录，共计150条。
+数据集包括4个属性，分别为花萼的长、花萼的宽、花瓣的长和花瓣的宽。对花瓣我们可能比较熟悉，花萼是什么呢？花萼是花冠外面的绿色被叶，在花尚未开放时，保护着花蕾。四个属性的单位都是cm，属于数值变量，四个属性均不存在缺失值的情况，以下是各属性的一些统计值 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/11/10/calling_convention/" title="调用惯例"><img class="post_bg" src="https://cdn.niceasiv.cn/20221107171916.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="调用惯例"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/11/10/calling_convention/" title="调用惯例">调用惯例</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-11-10T10:16:09.000Z" title="Created 2022-11-10 18:16:09">2022-11-10</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CTF/">CTF</a></span></div><div class="content">调用惯例
+简要介绍
+==调用惯例(Calling Conventions)==指计算机程序执行时调用函数或过程的一些约定，包括：
+
+1.函数的参数是通过栈还是寄存器传递？
+2.如果通过栈传递，顺序是怎样的，是从左至右入栈还是相反。
+3.谁负责清理栈，是调用者还是被调用者？
+
+针对这三个约定，不同的调用惯例有不同的实现，参考课本和搜索引擎，归纳如下
+
+
+
+调用惯例
+调用场合
+传参方式
+入栈顺序
+传返回值
+清理栈者
+名字修饰
+
+
+
+
+cdecl
+Windows API
+栈传参
+从右至左压栈
+寄存器(EAX)
+调用者函数
+_+函数名
+
+
+stdcall
+C/C++
+栈传参
+从右至左压栈
+寄存器(EAX)
+被调用者函数
+_+函数名+@+参数的字节数
+
+
+fastcall
+GCC/Microsoft
+左DWORD用ECX和EDX，剩余栈传参
+从右至左压栈
+寄存器(EAX)
+被调用者函数
+@+函数名+@+参数字节数
+
+
+
+程序分析
+函数设置
+main函数
+1234567891011121314#include&lt;stdio.h&gt;int __cdecl add1(int a, int b) ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/11/01/RSA%E5%A4%A7%E7%A4%BC%E5%8C%85/" title="RSA 加密体制破译"><img class="post_bg" src="https://cdn.niceasiv.cn/20221103132444.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="RSA 加密体制破译"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/11/01/RSA%E5%A4%A7%E7%A4%BC%E5%8C%85/" title="RSA 加密体制破译">RSA 加密体制破译</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-11-01T10:16:09.000Z" title="Created 2022-11-01 18:16:09">2022-11-01</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/course/">course</a></span></div><div class="content">题目摘要
+赛题名称： RSA 加密体制破译
+赛题描述
+RSA密码算法是使用最为广泛的公钥密码体制。该体制简单且易于实现，只需要选择5个参数即可（两个素数𝑝𝑝p和𝑞𝑞q、模数𝑁=𝑝𝑞𝑁=𝑝𝑞N=pq、加密指数𝑒𝑒e和解密指数𝑑𝑑d。设𝑚为待加密消息RSA体制破译相当于已知𝑚𝑒𝑚^𝑒me modmodmod 𝑁𝑁N能否还原𝑚的数论问题。目前模数规模为1024比特的RSA算法一般情况下是安全的，但是如果参数选取不当，同样存在被破译的可能。
+有人制作了一个RSA加解密软件采用的RSA体制的参数特点描述见密码背景部分）。已知该软件发送某个明文的所有参数和加密过程的全部数据（加密案例文件详见附件3-1。Alice使用该软件发送了一个通关密语，且所有加密数据已经被截获，请问能否仅从加密数据恢复该通关密语及RSA体制参数？如能请给出原文和参数，如不能请给出已恢复部分并说明剩余部分不能恢复的理由？
+加密过程
+
+原始明文
+
+1This is a test of my RSA system.
+Frame0
+1A5F51EB02EA9C0CC9B96926A08A7 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/10/31/Week6%20quiz/" title="Week 6 - Programming Assignment"><img class="post_bg" src="https://cdn.niceasiv.cn/20221101224703.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Week 6 - Programming Assignment"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/31/Week6%20quiz/" title="Week 6 - Programming Assignment">Week 6 - Programming Assignment</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-10-31T10:16:09.000Z" title="Created 2022-10-31 18:16:09">2022-10-31</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/course/">course</a></span></div><div class="content">Content
+更好的效果PDF:pdf文章列表 | Asiv’s Blog (niceasiv.cn)
+Factoring challenge #1:
+Your goal in this project is to break RSA when the public modulus NNN is generated incorrectly. This should serve as yet another reminder not to implement crypto primitives yourself.
+Normally, the primes that comprise an RSA modulus are generated independently of one another. But suppose a developer decides to generate the first prime ppp by choosing a random number RRR and scanning for a prime close by. The second prim ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/10/28/Adversary%20Agnostic%20Robust%20Deep%20Reinforcement%20Learning/" title="Adversary Agnostic Robust Deep Reinforcement Learning"><img class="post_bg" src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/pd_baselines_figures-Page-2.svg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Adversary Agnostic Robust Deep Reinforcement Learning"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/10/28/Adversary%20Agnostic%20Robust%20Deep%20Reinforcement%20Learning/" title="Adversary Agnostic Robust Deep Reinforcement Learning">Adversary Agnostic Robust Deep Reinforcement Learning</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-10-28T10:16:09.000Z" title="Created 2022-10-28 18:16:09">2022-10-28</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Machine-Learning/">Machine Learning</a></span></div><div class="content">主要内容
+adversary agnostic manner under the PD paradigm
+许多工作已经研究了将预定义的对抗性纳入训练过程，以在扰动的观察中获得更好的泛化能力。例如，Mirman等人 [8] 和Fischer等人 [9] 利用基于对抗性培训的 [10]policy distillation (PD) [11] 来获得准确而稳健的学生政策，通过从快速梯度符号方法 (FGSM) 和投影梯度下降 (PGD) 生成的对抗示例中学习，可以获得鲁棒性。最近，基于状态-对抗性马尔可夫决策过程 (SA-MDP) 的表述，Zhang等 [12] 提出了一种理论上的原则性正则化，以使政策的处方与对抗扰动保持一致，从而仍然依赖于对手。
+DQN
+DQN（Deep Q-Network）是深度强化学习（Deep Reinforcement Learning）的开山之作，将深度学习引入强化学习中，构建了 Perception 到 Decision 的 End-to-end 架构。
+经验回放 Experience Replay
+DQN 面临着几个挑战：
+
+深度学习需要大量带标签的训练数据 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/07/17/log4j%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="Log4j漏洞复现"><img class="post_bg" src="https://picx1.zhimg.com/v2-6c432537a88e7fdd8a275bd0bda88791_720w.jpg?source=172ae18b" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Log4j漏洞复现"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/07/17/log4j%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="Log4j漏洞复现">Log4j漏洞复现</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2022-07-17T12:51:09.000Z" title="Created 2022-07-17 20:51:09">2022-07-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CTF/">CTF</a></span></div><div class="content">主要内容
+CVE-2021-44228 Apache Log4j漏洞复现
+0x01.漏洞情况
+		
+影响范围：
+Apache Log4j 2.x &lt; 2.15.0-rc2
+Apache Log4j2某些功能存在递归解析功能，攻击者可直接构造恶意请求，触发远程代码执行漏洞。
+Spring-Boot-strater-log4j2、Apache Struts2、Apache Solr、Apache Flink、Apache Druid、ElasticSearch、Flume、Dubbo、Redis、Logstash、Kafka均受影响。
+0x02.组件介绍
+RIM
+RMI ( Remote Method Invocation , 远程方法调用 ) 是分布式编程中的一个基本思想。实现远程方法调用的技术有很多，例如CORBA、WebService，这两种是独立于编程语言的。而Java RMI是专为Java环境设计的远程方法调用机制，远程服务器实现具体的Java方法并提供接口，客户端本地仅需根据接口类的定义，提供相应的参数即可调用远程方法并获取执行结果，使分布在不同的JVM中的对象的外表和行 ...</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/sysimg/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">NiceAsiv</div><div class="author-info__description">我的CTF技术笔记</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/asivwolf"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="/Todo/" target="_blank" title="Todo"><i class="fas fa-tasks"></i></a><a class="social-icon" href="/pdf/" target="_blank" title="PDF"><i class="fas fa-file-pdf"></i></a></div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/PE_DLL/" title="通过修改 PE 装载 DLL 实验"><img src="https://cdn.niceasiv.cn/image-20221129184740738.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="通过修改 PE 装载 DLL 实验"/></a><div class="content"><a class="title" href="/2022/11/28/PE_DLL/" title="通过修改 PE 装载 DLL 实验">通过修改 PE 装载 DLL 实验</a><time datetime="2022-11-28T10:16:09.000Z" title="Created 2022-11-28 18:16:09">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/22/cluster/" title="KNN&amp;DBscan&amp;K-means实现"><img src="https://cdn.niceasiv.cn/20210526131701159.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="KNN&amp;DBscan&amp;K-means实现"/></a><div class="content"><a class="title" href="/2022/11/22/cluster/" title="KNN&amp;DBscan&amp;K-means实现">KNN&amp;DBscan&amp;K-means实现</a><time datetime="2022-11-22T12:51:09.000Z" title="Created 2022-11-22 20:51:09">2022-11-22</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CTF/"><span class="card-category-list-name">CTF</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Machine-Learning/"><span class="card-category-list-name">Machine Learning</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/course/"><span class="card-category-list-name">course</span><span class="card-category-list-count">4</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/Crypto/" style="font-size: 1.5em; color: #99a9bf">Crypto</a> <a href="/tags/DBscan/" style="font-size: 1.1em; color: #999">DBscan</a> <a href="/tags/DDPG/" style="font-size: 1.1em; color: #999">DDPG</a> <a href="/tags/DQN/" style="font-size: 1.1em; color: #999">DQN</a> <a href="/tags/K-means/" style="font-size: 1.1em; color: #999">K-means</a> <a href="/tags/KNN/" style="font-size: 1.1em; color: #999">KNN</a> <a href="/tags/Log4J/" style="font-size: 1.1em; color: #999">Log4J</a> <a href="/tags/Machine-Learning/" style="font-size: 1.1em; color: #999">Machine Learning</a> <a href="/tags/PD/" style="font-size: 1.1em; color: #999">PD</a> <a href="/tags/Reinforcement-Learning/" style="font-size: 1.1em; color: #999">Reinforcement Learning</a> <a href="/tags/Reverse/" style="font-size: 1.5em; color: #99a9bf">Reverse</a> <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" style="font-size: 1.1em; color: #999">漏洞复现</a></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.niceasiv.cn/202210311612595.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022 NiceAsiv</div><div class="framework-info"></div><div class="framework-info"><span class="footer-separator"> </span><a target="_blank" rel="noopener" href="https://hexo.io"><img class="entered loading" src="https://img.shields.io/badge/Frame-Hexo-blue?style=plastic&amp;logo=hexo" title="博客框架为Hexo" alt="hexo" data-ll-status="loading"/></a><span class="footer-separator"> </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly"><img class="entered loading" src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=plastic&amp;amp&amp;logo=bitdefender" title="主题采用butterfly" alt="主题采用butterfly" data-ll-status="loading"/></a><span class="footer-separator"> </span><a target="_blank" rel="noopener" href="https://www.jsdelivr.com/"> <img class="entered loading" src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=plastic&amp;amp&amp;logo=jsDelivr" title="本站使用JsDelivr为静态资源提供CDN加速" alt="jsd加速" data-ll-status="loading"/></a><span class="footer-separator"></span><a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"> <img class="entered loading" src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=plastic&amp;amp&amp;logo=Claris" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" alt="协议" data-ll-status="loading"/></a></div><div class="framework-info"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">陕ICP备2021014123号-1</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

